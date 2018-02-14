@@ -508,7 +508,7 @@ def stomata_stat_batch_classify(image, region_number, ckpt_path):
 
     sess = tf.InteractiveSession()
     saver = tf.train.Saver()
-    sess.run(tf.initialize_all_variables())
+    sess.run(tf.global_variables_initializer())
     if ckpt_path:
         saver.restore(sess, ckpt_path)
     softmax = tf.nn.softmax(logits).eval()

@@ -40,7 +40,7 @@ def load_data(csv, batch_size, shuffle = True, distored = True):
         #image = tf.image.random_saturation(image, lower=0.6, upper=1.4)
 
     image = tf.image.resize_images(image, DST_INPUT_SIZE, DST_INPUT_SIZE)
-    image = tf.image.per_image_whitening(image)
+    image = tf.image.per_image_standardization(image)
 
     # Ensure that the random shuffling has good mixing properties.
     min_fraction_of_examples_in_queue = 0.4
@@ -121,7 +121,7 @@ def _tfrecord_generate_image_and_label_batch(image, label, min_queue_examples,
             capacity=min_queue_examples + 3 * batch_size)
 
     # Display the training images in the visualizer.
-    tf.image_summary('image', images, max_images = 100)
+    tf.summary.image('image', images, max_images = 100)
     return images, label_batch
 def _generate_image_and_label_batch(image, label, filename, min_queue_examples,
                                     batch_size, shuffle):
@@ -146,7 +146,7 @@ def _generate_image_and_label_batch(image, label, filename, min_queue_examples,
             capacity=min_queue_examples + 3 * batch_size)
 
     # Display the training images in the visualizer.
-    tf.image_summary('image', images, max_images = 100)
+    tf.summary.image('image', images, max_images = 100)
 
     labels = tf.reshape(label_batch, [batch_size, NUM_CLASS])
     return images, labels, filename

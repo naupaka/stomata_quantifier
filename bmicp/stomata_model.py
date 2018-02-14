@@ -45,12 +45,12 @@ def tf_inference(images, BATCH_SIZE, image_size, NUM_CLASSES):
         # put NumKernels to the 1st dimension
         x2 = tf.transpose(x1, (3, 0, 1, 2))
         # organize grid on Y axis
-        x3 = tf.reshape(x2, tf.pack([grid_X, Y * grid_Y, X, channels]))
+        x3 = tf.reshape(x2, tf.stack([grid_X, Y * grid_Y, X, channels]))
 
         # switch X and Y axes
         x4 = tf.transpose(x3, (0, 2, 1, 3))
         # organize grid on X axis
-        x5 = tf.reshape(x4, tf.pack([1, X * grid_X, Y * grid_Y, channels]))
+        x5 = tf.reshape(x4, tf.stack([1, X * grid_X, Y * grid_Y, channels]))
 
         # back to normal order (not combining with the next step for clarity)
         x6 = tf.transpose(x5, (2, 1, 3, 0))
@@ -65,13 +65,13 @@ def tf_inference(images, BATCH_SIZE, image_size, NUM_CLASSES):
     def _variable_with_weight_decay(name, shape, stddev, wd):
         var = tf.get_variable(name, shape=shape, initializer=tf.truncated_normal_initializer(stddev=stddev))
         if wd:
-            weight_decay = tf.mul(tf.nn.l2_loss(var), wd, name='weight_loss')
+            weight_decay = tf.multiply(tf.nn.l2_loss(var), wd, name='weight_loss')
             tf.add_to_collection('losses', weight_decay)
         return var
 
     def _activation_summary(x):
         tensor_name = x.op.name
-        tf.scalar_summary(tensor_name + '/sparsity', tf.nn.zero_fraction(x))
+        tf.summary.scalar(tensor_name + '/sparsity', tf.nn.zero_fraction(x))
 
     with tf.variable_scope('conv1') as scope:
         kernel = tf.get_variable('weights', shape=[3, 3, 3, 32], initializer=tf.truncated_normal_initializer(stddev=0.1))
@@ -81,7 +81,7 @@ def tf_inference(images, BATCH_SIZE, image_size, NUM_CLASSES):
         conv1 = tf.nn.relu(bias, name=scope.name)
         _activation_summary(conv1)
         grid = put_kernels_on_grid (kernel)
-        tf.image_summary('conv1/features', grid, max_images=1)
+        tf.summary.image('conv1/features', grid, max_outputs=1)
     pool1 = tf.nn.max_pool(conv1, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1], padding='SAME', name='pool1')
 
     with tf.variable_scope('conv2') as scope:
@@ -214,16 +214,16 @@ def max_pool_2x2(x):
 
 def loss(logits, labels):
     cross_entropy = -tf.reduce_sum(labels*tf.log(tf.clip_by_value(logits,1e-10,1.0)))
-    tf.scalar_summary("cross_entropy", cross_entropy)
+    tf.summary.scalar("cross_entropy", cross_entropy)
     return cross_entropy    
 
 def tf_loss(logits, labels,BATCH_SIZE, NUM_CLASSES):
     sparse_labels = tf.reshape(labels, [BATCH_SIZE, 1])
     indices = tf.reshape(tf.range(BATCH_SIZE), [BATCH_SIZE, 1])
-    concated = tf.concat(1, [indices, sparse_labels])
+    concated = tf.concat(axis=1, values=[indices, sparse_labels])
     dense_labels = tf.sparse_to_dense(concated, [BATCH_SIZE, NUM_CLASSES], 1.0, 0.0)
 
-    cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits, dense_labels)
+    cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=dense_labels)
     mean = tf.reduce_mean(cross_entropy, name='cross_entropy')
     tf.add_to_collection('losses', mean)
     return tf.add_n(tf.get_collection('losses'), name='total_loss')
@@ -233,7 +233,7 @@ def tf_train(total_loss, global_step):
     loss_averages_op = loss_averages.apply(losses + [total_loss])
 
     for l in losses + [total_loss]:
-        tf.scalar_summary(l.op.name + ' (raw)', l)
+        tf.summary.scalar(l.op.name + ' (raw)', l)
 
     # Apply gradients, and add histograms
     with tf.control_dependencies([loss_averages_op]):
@@ -241,9 +241,9 @@ def tf_train(total_loss, global_step):
         grads = opt.compute_gradients(total_loss)
     apply_gradient_op = opt.apply_gradients(grads, global_step=global_step)
     for var in tf.trainable_variables():
-        tf.histogram_summary(var.op.name, var)
+        tf.summary.histogram(var.op.name, var)
     for grad, var in grads:
-        tf.histogram_summary(var.op.name + '/gradients', grad)
+        tf.summary.histogram(var.op.name + '/gradients', grad)
 
     # Track the moving averages of all trainable variables
     variable_averages = tf.train.ExponentialMovingAverage(MOVING_AVERAGE_DECAY, global_step)
@@ -261,7 +261,7 @@ def training2(total_loss, global_step):
     loss_averages_op = loss_averages.apply(losses + [total_loss])
 
     for l in losses + [total_loss]:
-        tf.scalar_summary(l.op.name + ' (raw)', l)
+        tf.summary.scalar(l.op.name + ' (raw)', l)
 
     # Apply gradients, and add histograms
     with tf.control_dependencies([loss_averages_op]):
@@ -269,7 +269,7 @@ def training2(total_loss, global_step):
         grads = opt.compute_gradients(total_loss)
     apply_gradient_op = opt.apply_gradients(grads, global_step=global_step)
     for var in tf.trainable_variables():
-        tf.histogram_summary(var.op.name, var)
+        tf.summary.histogram(var.op.name, var)
     #for grad, var in grads:
      #   if grad:
       #      tf.histogram_summary(var.op.name + '/gradients', grad)
@@ -285,7 +285,7 @@ def accuracy(logits, labels):
     labels = tf.cast(labels, tf.int64)
     correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(labels, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-    tf.scalar_summary("accuracy", accuracy)
+    tf.summary.scalar("accuracy", accuracy)
 
     return accuracy
 
@@ -296,57 +296,57 @@ def draw_input(images,IMAGE_SIZE):
     (?, 28, 28, 1)
     '''
     input_imgs = tf.slice(images, [0,0,0,0], [50,-1,-1,-1])
-    input_imgs = tf.split(0, 50, input_imgs)
+    input_imgs = tf.split(axis=0, num_or_size_splits=50, value=input_imgs)
 
     for i in range(50):
       input_imgs[i] = tf.reshape(input_imgs[i], [IMAGE_SIZE, IMAGE_SIZE, 3])
       #input_imgs[i] = tf.image.resize_image_with_crop_or_pad(input_imgs[i], 30, 30)
       input_imgs[i] = tf.image.resize_images(input_imgs[i], 30,30)
       input_imgs[i] = tf.reshape(input_imgs[i], [1, 30, 30, 3])
-    input_img1 = tf.concat(1, input_imgs[0:7])
-    input_img2 = tf.concat(1, input_imgs[7:14])
-    input_img3 = tf.concat(1, input_imgs[14:21])
-    input_img4 = tf.concat(1, input_imgs[21:28])
-    input_img5 = tf.concat(1, input_imgs[28:35])
-    input_img6 = tf.concat(1, input_imgs[35:42])
-    input_img7 = tf.concat(1, input_imgs[42:49])
+    input_img1 = tf.concat(axis=1, values=input_imgs[0:7])
+    input_img2 = tf.concat(axis=1, values=input_imgs[7:14])
+    input_img3 = tf.concat(axis=1, values=input_imgs[14:21])
+    input_img4 = tf.concat(axis=1, values=input_imgs[21:28])
+    input_img5 = tf.concat(axis=1, values=input_imgs[28:35])
+    input_img6 = tf.concat(axis=1, values=input_imgs[35:42])
+    input_img7 = tf.concat(axis=1, values=input_imgs[42:49])
 
-    input_img = tf.concat(2, [input_img1, input_img2, input_img3, input_img4, input_img5, input_img6, input_img7])
+    input_img = tf.concat(axis=2, values=[input_img1, input_img2, input_img3, input_img4, input_img5, input_img6, input_img7])
 
     return input_img
 
 def draw_hconv(h_conv1,IMAGE_SIZE,layer):
     zero_pad = tf.zeros([1,IMAGE_SIZE,IMAGE_SIZE,1])       
     h_conv1_imgs = tf.slice(h_conv1, [0,0,0,0], [49,-1,-1,-1]) 
-    h_conv1_imgs = tf.split(0, 49, h_conv1_imgs) # (1,28,28,32) * 49 (images)
+    h_conv1_imgs = tf.split(axis=0, num_or_size_splits=49, value=h_conv1_imgs) # (1,28,28,32) * 49 (images)
         
     for i in range(49):
-        h_conv1_imgs[i] = tf.concat(3, [h_conv1_imgs[i],zero_pad,zero_pad,zero_pad,zero_pad]) # (1,28,28,36)
-        h_conv1_imgs_part = tf.split(3, 36, h_conv1_imgs[i]) # (1,96,96,1) * 36
+        h_conv1_imgs[i] = tf.concat(axis=3, values=[h_conv1_imgs[i],zero_pad,zero_pad,zero_pad,zero_pad]) # (1,28,28,36)
+        h_conv1_imgs_part = tf.split(axis=3, num_or_size_splits=36, value=h_conv1_imgs[i]) # (1,96,96,1) * 36
         for j in range(36):
             h_conv1_imgs_part[j] = tf.reshape(h_conv1_imgs_part[j], [IMAGE_SIZE,IMAGE_SIZE,1])
             h_conv1_imgs_part[j] = tf.image.resize_images(h_conv1_imgs_part[j], IMAGE_SIZE,IMAGE_SIZE)
             #h_conv1_imgs_part[j] = tf.image.resize_image_with_crop_or_pad(h_conv1_imgs_part[j], 60, 60)
             h_conv1_imgs_part[j] = tf.reshape(h_conv1_imgs_part[j], [1,IMAGE_SIZE,IMAGE_SIZE,1])
-        h_conv1_part_img1 = tf.concat(1, h_conv1_imgs_part[0:6])
-        h_conv1_part_img2 = tf.concat(1, h_conv1_imgs_part[6:12])
-        h_conv1_part_img3 = tf.concat(1, h_conv1_imgs_part[12:18])
-        h_conv1_part_img4 = tf.concat(1, h_conv1_imgs_part[18:24])
-        h_conv1_part_img5 = tf.concat(1, h_conv1_imgs_part[24:30])
-        h_conv1_part_img6 = tf.concat(1, h_conv1_imgs_part[30:36])
-        h_conv1_part_img = tf.concat(2, [h_conv1_part_img1, h_conv1_part_img2, h_conv1_part_img3, h_conv1_part_img4, h_conv1_part_img5, h_conv1_part_img6])
+        h_conv1_part_img1 = tf.concat(axis=1, values=h_conv1_imgs_part[0:6])
+        h_conv1_part_img2 = tf.concat(axis=1, values=h_conv1_imgs_part[6:12])
+        h_conv1_part_img3 = tf.concat(axis=1, values=h_conv1_imgs_part[12:18])
+        h_conv1_part_img4 = tf.concat(axis=1, values=h_conv1_imgs_part[18:24])
+        h_conv1_part_img5 = tf.concat(axis=1, values=h_conv1_imgs_part[24:30])
+        h_conv1_part_img6 = tf.concat(axis=1, values=h_conv1_imgs_part[30:36])
+        h_conv1_part_img = tf.concat(axis=2, values=[h_conv1_part_img1, h_conv1_part_img2, h_conv1_part_img3, h_conv1_part_img4, h_conv1_part_img5, h_conv1_part_img6])
         h_conv1_part_img = tf.reshape(h_conv1_part_img, [IMAGE_SIZE*6,IMAGE_SIZE*6,1])
         h_conv1_part_img = tf.image.resize_image_with_crop_or_pad(h_conv1_part_img, IMAGE_SIZE*6+20, IMAGE_SIZE*6+20)
         h_conv1_part_img = tf.reshape(h_conv1_part_img, [1,IMAGE_SIZE*6+20,IMAGE_SIZE*6+20,1])
         h_conv1_imgs[i] = h_conv1_part_img
-    h_conv1_img1 = tf.concat(1, h_conv1_imgs[0:7])
-    h_conv1_img2 = tf.concat(1, h_conv1_imgs[7:14])
-    h_conv1_img3 = tf.concat(1, h_conv1_imgs[14:21])
-    h_conv1_img4 = tf.concat(1, h_conv1_imgs[21:28])
-    h_conv1_img5 = tf.concat(1, h_conv1_imgs[28:35])
-    h_conv1_img6 = tf.concat(1, h_conv1_imgs[35:42])
-    h_conv1_img7 = tf.concat(1, h_conv1_imgs[42:49])
-    h_conv1_img = tf.concat(2, [h_conv1_img1, h_conv1_img2, h_conv1_img3, h_conv1_img4, h_conv1_img5, h_conv1_img6, h_conv1_img7])
+    h_conv1_img1 = tf.concat(axis=1, values=h_conv1_imgs[0:7])
+    h_conv1_img2 = tf.concat(axis=1, values=h_conv1_imgs[7:14])
+    h_conv1_img3 = tf.concat(axis=1, values=h_conv1_imgs[14:21])
+    h_conv1_img4 = tf.concat(axis=1, values=h_conv1_imgs[21:28])
+    h_conv1_img5 = tf.concat(axis=1, values=h_conv1_imgs[28:35])
+    h_conv1_img6 = tf.concat(axis=1, values=h_conv1_imgs[35:42])
+    h_conv1_img7 = tf.concat(axis=1, values=h_conv1_imgs[42:49])
+    h_conv1_img = tf.concat(axis=2, values=[h_conv1_img1, h_conv1_img2, h_conv1_img3, h_conv1_img4, h_conv1_img5, h_conv1_img6, h_conv1_img7])
     
     return h_conv1_img
 def draw_hpool(h_pool1,IMAGE_SIZE,layer):
@@ -357,36 +357,36 @@ def draw_hpool(h_pool1,IMAGE_SIZE,layer):
     IMAGE_SIZE = int(IMAGE_SIZE/2)
     zero_pad = tf.zeros([1,IMAGE_SIZE,IMAGE_SIZE,1])
     h_pool1_imgs = tf.slice(h_pool1, [0,0,0,0], [49,-1,-1,-1])
-    h_pool1_imgs = tf.split(0, 49, h_pool1_imgs) # (1,14,14,32) * 49
+    h_pool1_imgs = tf.split(axis=0, num_or_size_splits=49, value=h_pool1_imgs) # (1,14,14,32) * 49
     
     for i in range(49):
-      h_pool1_imgs[i] = tf.concat(3, [h_pool1_imgs[i],zero_pad,zero_pad,zero_pad,zero_pad]) # (1,14,14,36)
-      h_pool1_imgs_part = tf.split(3, 36, h_pool1_imgs[i]) # (1,14,14,1) * 36
+      h_pool1_imgs[i] = tf.concat(axis=3, values=[h_pool1_imgs[i],zero_pad,zero_pad,zero_pad,zero_pad]) # (1,14,14,36)
+      h_pool1_imgs_part = tf.split(axis=3, num_or_size_splits=36, value=h_pool1_imgs[i]) # (1,14,14,1) * 36
       for j in range(36):
         h_pool1_imgs_part[j] = tf.reshape(h_pool1_imgs_part[j], [IMAGE_SIZE,IMAGE_SIZE,1])
         h_pool1_imgs_part[j] = tf.image.resize_images(h_pool1_imgs_part[j], IMAGE_SIZE,IMAGE_SIZE)
         #h_pool1_imgs_part[j] = tf.image.resize_image_with_crop_or_pad(h_pool1_imgs_part[j], 32, 32)
         h_pool1_imgs_part[j] = tf.reshape(h_pool1_imgs_part[j], [1,IMAGE_SIZE,IMAGE_SIZE,1])
-      h_pool1_part_img1 = tf.concat(1, h_pool1_imgs_part[0:6])
-      h_pool1_part_img2 = tf.concat(1, h_pool1_imgs_part[6:12])
-      h_pool1_part_img3 = tf.concat(1, h_pool1_imgs_part[12:18])
-      h_pool1_part_img4 = tf.concat(1, h_pool1_imgs_part[18:24])
-      h_pool1_part_img5 = tf.concat(1, h_pool1_imgs_part[24:30])
-      h_pool1_part_img6 = tf.concat(1, h_pool1_imgs_part[30:36])
-      h_pool1_part_img = tf.concat(2, [h_pool1_part_img1, h_pool1_part_img2, h_pool1_part_img3, h_pool1_part_img4, h_pool1_part_img5, h_pool1_part_img6])
+      h_pool1_part_img1 = tf.concat(axis=1, values=h_pool1_imgs_part[0:6])
+      h_pool1_part_img2 = tf.concat(axis=1, values=h_pool1_imgs_part[6:12])
+      h_pool1_part_img3 = tf.concat(axis=1, values=h_pool1_imgs_part[12:18])
+      h_pool1_part_img4 = tf.concat(axis=1, values=h_pool1_imgs_part[18:24])
+      h_pool1_part_img5 = tf.concat(axis=1, values=h_pool1_imgs_part[24:30])
+      h_pool1_part_img6 = tf.concat(axis=1, values=h_pool1_imgs_part[30:36])
+      h_pool1_part_img = tf.concat(axis=2, values=[h_pool1_part_img1, h_pool1_part_img2, h_pool1_part_img3, h_pool1_part_img4, h_pool1_part_img5, h_pool1_part_img6])
       h_pool1_part_img = tf.reshape(h_pool1_part_img, [IMAGE_SIZE*6,IMAGE_SIZE*6,1])
       h_pool1_part_img = tf.image.resize_image_with_crop_or_pad(h_pool1_part_img, IMAGE_SIZE*6+20, IMAGE_SIZE*6+20)
       h_pool1_part_img = tf.reshape(h_pool1_part_img, [1,IMAGE_SIZE*6+20,IMAGE_SIZE*6+20,1])
       h_pool1_imgs[i] = h_pool1_part_img
-    h_pool1_img1 = tf.concat(1, h_pool1_imgs[0:7])
-    h_pool1_img2 = tf.concat(1, h_pool1_imgs[7:14])
-    h_pool1_img3 = tf.concat(1, h_pool1_imgs[14:21])
-    h_pool1_img4 = tf.concat(1, h_pool1_imgs[21:28])
-    h_pool1_img5 = tf.concat(1, h_pool1_imgs[28:35])
-    h_pool1_img6 = tf.concat(1, h_pool1_imgs[35:42])
-    h_pool1_img7 = tf.concat(1, h_pool1_imgs[42:49])
-    h_pool1_img = tf.concat(2, [h_pool1_img1, h_pool1_img2, h_pool1_img3, h_pool1_img4, h_pool1_img5, h_pool1_img6, h_pool1_img7])
+    h_pool1_img1 = tf.concat(axis=1, values=h_pool1_imgs[0:7])
+    h_pool1_img2 = tf.concat(axis=1, values=h_pool1_imgs[7:14])
+    h_pool1_img3 = tf.concat(axis=1, values=h_pool1_imgs[14:21])
+    h_pool1_img4 = tf.concat(axis=1, values=h_pool1_imgs[21:28])
+    h_pool1_img5 = tf.concat(axis=1, values=h_pool1_imgs[28:35])
+    h_pool1_img6 = tf.concat(axis=1, values=h_pool1_imgs[35:42])
+    h_pool1_img7 = tf.concat(axis=1, values=h_pool1_imgs[42:49])
+    h_pool1_img = tf.concat(axis=2, values=[h_pool1_img1, h_pool1_img2, h_pool1_img3, h_pool1_img4, h_pool1_img5, h_pool1_img6, h_pool1_img7])
 
-    h_pool1_sum = tf.image_summary("h_pool1_Visualize", h_pool1_img, max_images=10)
+    h_pool1_sum = tf.summary.image("h_pool1_Visualize", h_pool1_img, max_outputs=10)
     
     return h_pool1_img

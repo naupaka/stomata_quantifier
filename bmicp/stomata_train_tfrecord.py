@@ -33,11 +33,11 @@ def main(ckpt = None):
         #images_test, labels_test, _ = stomata_input.load_data([FLAGS.train], FLAGS.batch_size, shuffle = True, distored = False)
         #logits_test = stomata_model.inference_deep(images, keep_prob, stomata_input.DST_INPUT_SIZE, stomata_input.NUM_CLASS)
         #acc_testacc_test = stomata_model.accuracy(logits_test, labels_test)
-        summary_op = tf.merge_all_summaries()
+        summary_op = tf.summary.merge_all()
 
         saver = tf.train.Saver(max_to_keep = 0)
         sess = tf.Session()
-        sess.run(tf.initialize_all_variables())
+        sess.run(tf.global_variables_initializer())
 
         if ckpt:
             #print 'restore ckpt', ckpt
@@ -46,7 +46,7 @@ def main(ckpt = None):
         #summary_op_train = tf.merge_summary([loss_op,acc_op_train,input_sum,h_conv1_sum,h_pool1_sum,image_op_train])
         #summary_op_test = tf.merge_summary([image_op_test,acc_op_test])
 
-        summary_writer = tf.train.SummaryWriter(FLAGS.train_dir, sess.graph_def)
+        summary_writer = tf.summary.FileWriter(FLAGS.train_dir, sess.graph_def)
 
         for step in range(FLAGS.max_steps):
             start_time = time.time()
@@ -93,11 +93,11 @@ def visualize(ckpt):
         #images_test, labels_test, _ = stomata_input.load_data([FLAGS.train], FLAGS.batch_size, shuffle = True, distored = False)
         #logits_test = stomata_model.inference_deep(images, keep_prob, stomata_input.DST_INPUT_SIZE, stomata_input.NUM_CLASS)
         #acc_testacc_test = stomata_model.accuracy(logits_test, labels_test)
-        summary_op = tf.merge_all_summaries()
+        summary_op = tf.summary.merge_all()
 
         saver = tf.train.Saver(max_to_keep = 0)
         sess = tf.Session()
-        sess.run(tf.initialize_all_variables())
+        sess.run(tf.global_variables_initializer())
 
         if ckpt:
             #print 'restore ckpt', ckpt
@@ -106,7 +106,7 @@ def visualize(ckpt):
         #summary_op_train = tf.merge_summary([loss_op,acc_op_train,input_sum,h_conv1_sum,h_pool1_sum,image_op_train])
         #summary_op_test = tf.merge_summary([image_op_test,acc_op_test])
 
-        summary_writer = tf.train.SummaryWriter(FLAGS.train_dir, sess.graph_def)
+        summary_writer = tf.summary.FileWriter(FLAGS.train_dir, sess.graph_def)
 
         for step in range(FLAGS.max_steps):
             start_time = time.time()
