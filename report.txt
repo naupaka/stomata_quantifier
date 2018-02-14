@@ -1,0 +1,785 @@
+================================================================================
+Input tree: 'bmicp'
+================================================================================
+--------------------------------------------------------------------------------
+Processing file 'bmicp/stomata_train_tfrecord.py'
+ outputting to 'bmicip-updated/stomata_train_tfrecord.py'
+--------------------------------------------------------------------------------
+
+'bmicp/stomata_train_tfrecord.py' Line 36
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.merge_all_summaries' to 'tf.summary.merge_all'
+
+    Old:         summary_op = tf.merge_all_summaries()
+                              ~~~~~~~~~~~~~~~~~~~~~~   
+    New:         summary_op = tf.summary.merge_all()
+                              ~~~~~~~~~~~~~~~~~~~~   
+
+'bmicp/stomata_train_tfrecord.py' Line 40
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.initialize_all_variables' to 'tf.global_variables_initializer'
+
+    Old:         sess.run(tf.initialize_all_variables())
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+    New:         sess.run(tf.global_variables_initializer())
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+
+'bmicp/stomata_train_tfrecord.py' Line 49
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.train.SummaryWriter' to 'tf.summary.FileWriter'
+
+    Old:         summary_writer = tf.train.SummaryWriter(FLAGS.train_dir, sess.graph_def)
+                                  ~~~~~~~~~~~~~~~~~~~~~~                                  
+    New:         summary_writer = tf.summary.FileWriter(FLAGS.train_dir, sess.graph_def)
+                                  ~~~~~~~~~~~~~~~~~~~~~                                  
+
+'bmicp/stomata_train_tfrecord.py' Line 96
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.merge_all_summaries' to 'tf.summary.merge_all'
+
+    Old:         summary_op = tf.merge_all_summaries()
+                              ~~~~~~~~~~~~~~~~~~~~~~   
+    New:         summary_op = tf.summary.merge_all()
+                              ~~~~~~~~~~~~~~~~~~~~   
+
+'bmicp/stomata_train_tfrecord.py' Line 100
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.initialize_all_variables' to 'tf.global_variables_initializer'
+
+    Old:         sess.run(tf.initialize_all_variables())
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+    New:         sess.run(tf.global_variables_initializer())
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+
+'bmicp/stomata_train_tfrecord.py' Line 109
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.train.SummaryWriter' to 'tf.summary.FileWriter'
+
+    Old:         summary_writer = tf.train.SummaryWriter(FLAGS.train_dir, sess.graph_def)
+                                  ~~~~~~~~~~~~~~~~~~~~~~                                  
+    New:         summary_writer = tf.summary.FileWriter(FLAGS.train_dir, sess.graph_def)
+                                  ~~~~~~~~~~~~~~~~~~~~~                                  
+
+
+--------------------------------------------------------------------------------
+Processing file 'bmicp/stomata_input.py'
+ outputting to 'bmicip-updated/stomata_input.py'
+--------------------------------------------------------------------------------
+
+'bmicp/stomata_input.py' Line 43
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.image.per_image_whitening' to 'tf.image.per_image_standardization'
+
+    Old:     image = tf.image.per_image_whitening(image)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
+    New:     image = tf.image.per_image_standardization(image)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
+
+'bmicp/stomata_input.py' Line 124
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.image_summary' to 'tf.summary.image'
+
+    Old:     tf.image_summary('image', images, max_images = 100)
+             ~~~~~~~~~~~~~~~~                                    
+    New:     tf.summary.image('image', images, max_images = 100)
+             ~~~~~~~~~~~~~~~~                                    
+
+'bmicp/stomata_input.py' Line 149
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.image_summary' to 'tf.summary.image'
+
+    Old:     tf.image_summary('image', images, max_images = 100)
+             ~~~~~~~~~~~~~~~~                                    
+    New:     tf.summary.image('image', images, max_images = 100)
+             ~~~~~~~~~~~~~~~~                                    
+
+
+--------------------------------------------------------------------------------
+Processing file 'bmicp/__init__.py'
+ outputting to 'bmicip-updated/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Processing file 'bmicp/stomata_model.py'
+ outputting to 'bmicip-updated/stomata_model.py'
+--------------------------------------------------------------------------------
+
+'bmicp/stomata_model.py' Line 48
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.pack' to 'tf.stack'
+
+    Old:         x3 = tf.reshape(x2, tf.pack([grid_X, Y * grid_Y, X, channels]))
+                                     ~~~~~~~                                     
+    New:         x3 = tf.reshape(x2, tf.stack([grid_X, Y * grid_Y, X, channels]))
+                                     ~~~~~~~~                                     
+
+'bmicp/stomata_model.py' Line 53
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.pack' to 'tf.stack'
+
+    Old:         x5 = tf.reshape(x4, tf.pack([1, X * grid_X, Y * grid_Y, channels]))
+                                     ~~~~~~~                                         
+    New:         x5 = tf.reshape(x4, tf.stack([1, X * grid_X, Y * grid_Y, channels]))
+                                     ~~~~~~~~                                         
+
+'bmicp/stomata_model.py' Line 68
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.mul' to 'tf.multiply'
+
+    Old:             weight_decay = tf.mul(tf.nn.l2_loss(var), wd, name='weight_loss')
+                                    ~~~~~~                                             
+    New:             weight_decay = tf.multiply(tf.nn.l2_loss(var), wd, name='weight_loss')
+                                    ~~~~~~~~~~~                                             
+
+'bmicp/stomata_model.py' Line 74
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.scalar_summary' to 'tf.summary.scalar'
+
+    Old:         tf.scalar_summary(tensor_name + '/sparsity', tf.nn.zero_fraction(x))
+                 ~~~~~~~~~~~~~~~~~                                                    
+    New:         tf.summary.scalar(tensor_name + '/sparsity', tf.nn.zero_fraction(x))
+                 ~~~~~~~~~~~~~~~~~                                                    
+
+'bmicp/stomata_model.py' Line 84
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.image_summary' to 'tf.summary.image'
+
+    Old:         tf.image_summary('conv1/features', grid, max_images=1)
+                 ~~~~~~~~~~~~~~~~                                       
+    New:         tf.summary.image('conv1/features', grid, max_images=1)
+                 ~~~~~~~~~~~~~~~~                                       
+
+'bmicp/stomata_model.py' Line 217
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.scalar_summary' to 'tf.summary.scalar'
+
+    Old:     tf.scalar_summary("cross_entropy", cross_entropy)
+             ~~~~~~~~~~~~~~~~~                                 
+    New:     tf.summary.scalar("cross_entropy", cross_entropy)
+             ~~~~~~~~~~~~~~~~~                                 
+
+'bmicp/stomata_model.py' Line 223
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     concated = tf.concat(1, [indices, sparse_labels])
+                                                               
+    New:     concated = tf.concat(axis=1, values=[indices, sparse_labels])
+                                  ~~~~~   ~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 226
+--------------------------------------------------------------------------------
+
+Added keyword 'logits' to reordered function 'tf.nn.softmax_cross_entropy_with_logits'
+Added keyword 'labels' to reordered function 'tf.nn.softmax_cross_entropy_with_logits'
+
+    Old:     cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits, dense_labels)
+                                                                                           
+    New:     cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=dense_labels)
+                                                                     ~~~~~~~        ~~~~~~~              
+
+'bmicp/stomata_model.py' Line 236
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.scalar_summary' to 'tf.summary.scalar'
+
+    Old:         tf.scalar_summary(l.op.name + ' (raw)', l)
+                 ~~~~~~~~~~~~~~~~~                          
+    New:         tf.summary.scalar(l.op.name + ' (raw)', l)
+                 ~~~~~~~~~~~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 244
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.histogram_summary' to 'tf.summary.histogram'
+
+    Old:         tf.histogram_summary(var.op.name, var)
+                 ~~~~~~~~~~~~~~~~~~~~                   
+    New:         tf.summary.histogram(var.op.name, var)
+                 ~~~~~~~~~~~~~~~~~~~~                   
+
+'bmicp/stomata_model.py' Line 246
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.histogram_summary' to 'tf.summary.histogram'
+
+    Old:         tf.histogram_summary(var.op.name + '/gradients', grad)
+                 ~~~~~~~~~~~~~~~~~~~~                                   
+    New:         tf.summary.histogram(var.op.name + '/gradients', grad)
+                 ~~~~~~~~~~~~~~~~~~~~                                   
+
+'bmicp/stomata_model.py' Line 264
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.scalar_summary' to 'tf.summary.scalar'
+
+    Old:         tf.scalar_summary(l.op.name + ' (raw)', l)
+                 ~~~~~~~~~~~~~~~~~                          
+    New:         tf.summary.scalar(l.op.name + ' (raw)', l)
+                 ~~~~~~~~~~~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 272
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.histogram_summary' to 'tf.summary.histogram'
+
+    Old:         tf.histogram_summary(var.op.name, var)
+                 ~~~~~~~~~~~~~~~~~~~~                   
+    New:         tf.summary.histogram(var.op.name, var)
+                 ~~~~~~~~~~~~~~~~~~~~                   
+
+'bmicp/stomata_model.py' Line 288
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.scalar_summary' to 'tf.summary.scalar'
+
+    Old:     tf.scalar_summary("accuracy", accuracy)
+             ~~~~~~~~~~~~~~~~~                       
+    New:     tf.summary.scalar("accuracy", accuracy)
+             ~~~~~~~~~~~~~~~~~                       
+
+'bmicp/stomata_model.py' Line 299
+--------------------------------------------------------------------------------
+
+Added keyword 'axis' to reordered function 'tf.split'
+Added keyword 'num_or_size_splits' to reordered function 'tf.split'
+Added keyword 'value' to reordered function 'tf.split'
+
+    Old:     input_imgs = tf.split(0, 50, input_imgs)
+                                                      
+    New:     input_imgs = tf.split(axis=0, num_or_size_splits=50, value=input_imgs)
+                                   ~~~~~   ~~~~~~~~~~~~~~~~~~~    ~~~~~~            
+
+'bmicp/stomata_model.py' Line 306
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     input_img1 = tf.concat(1, input_imgs[0:7])
+                                                        
+    New:     input_img1 = tf.concat(axis=1, values=input_imgs[0:7])
+                                    ~~~~~   ~~~~~~~                 
+
+'bmicp/stomata_model.py' Line 307
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     input_img2 = tf.concat(1, input_imgs[7:14])
+                                                         
+    New:     input_img2 = tf.concat(axis=1, values=input_imgs[7:14])
+                                    ~~~~~   ~~~~~~~                  
+
+'bmicp/stomata_model.py' Line 308
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     input_img3 = tf.concat(1, input_imgs[14:21])
+                                                          
+    New:     input_img3 = tf.concat(axis=1, values=input_imgs[14:21])
+                                    ~~~~~   ~~~~~~~                   
+
+'bmicp/stomata_model.py' Line 309
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     input_img4 = tf.concat(1, input_imgs[21:28])
+                                                          
+    New:     input_img4 = tf.concat(axis=1, values=input_imgs[21:28])
+                                    ~~~~~   ~~~~~~~                   
+
+'bmicp/stomata_model.py' Line 310
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     input_img5 = tf.concat(1, input_imgs[28:35])
+                                                          
+    New:     input_img5 = tf.concat(axis=1, values=input_imgs[28:35])
+                                    ~~~~~   ~~~~~~~                   
+
+'bmicp/stomata_model.py' Line 311
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     input_img6 = tf.concat(1, input_imgs[35:42])
+                                                          
+    New:     input_img6 = tf.concat(axis=1, values=input_imgs[35:42])
+                                    ~~~~~   ~~~~~~~                   
+
+'bmicp/stomata_model.py' Line 312
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     input_img7 = tf.concat(1, input_imgs[42:49])
+                                                          
+    New:     input_img7 = tf.concat(axis=1, values=input_imgs[42:49])
+                                    ~~~~~   ~~~~~~~                   
+
+'bmicp/stomata_model.py' Line 314
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     input_img = tf.concat(2, [input_img1, input_img2, input_img3, input_img4, input_img5, input_img6, input_img7])
+                                                                                                                            
+    New:     input_img = tf.concat(axis=2, values=[input_img1, input_img2, input_img3, input_img4, input_img5, input_img6, input_img7])
+                                   ~~~~~   ~~~~~~~                                                                                      
+
+'bmicp/stomata_model.py' Line 321
+--------------------------------------------------------------------------------
+
+Added keyword 'axis' to reordered function 'tf.split'
+Added keyword 'num_or_size_splits' to reordered function 'tf.split'
+Added keyword 'value' to reordered function 'tf.split'
+
+    Old:     h_conv1_imgs = tf.split(0, 49, h_conv1_imgs) # (1,28,28,32) * 49 (images)
+                                                                                       
+    New:     h_conv1_imgs = tf.split(axis=0, num_or_size_splits=49, value=h_conv1_imgs) # (1,28,28,32) * 49 (images)
+                                     ~~~~~   ~~~~~~~~~~~~~~~~~~~    ~~~~~~                                           
+
+'bmicp/stomata_model.py' Line 324
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:         h_conv1_imgs[i] = tf.concat(3, [h_conv1_imgs[i],zero_pad,zero_pad,zero_pad,zero_pad]) # (1,28,28,36)
+                                                                                                                      
+    New:         h_conv1_imgs[i] = tf.concat(axis=3, values=[h_conv1_imgs[i],zero_pad,zero_pad,zero_pad,zero_pad]) # (1,28,28,36)
+                                             ~~~~~   ~~~~~~~                                                                      
+
+'bmicp/stomata_model.py' Line 325
+--------------------------------------------------------------------------------
+
+Added keyword 'axis' to reordered function 'tf.split'
+Added keyword 'num_or_size_splits' to reordered function 'tf.split'
+Added keyword 'value' to reordered function 'tf.split'
+
+    Old:         h_conv1_imgs_part = tf.split(3, 36, h_conv1_imgs[i]) # (1,96,96,1) * 36
+                                                                                         
+    New:         h_conv1_imgs_part = tf.split(axis=3, num_or_size_splits=36, value=h_conv1_imgs[i]) # (1,96,96,1) * 36
+                                              ~~~~~   ~~~~~~~~~~~~~~~~~~~    ~~~~~~                                    
+
+'bmicp/stomata_model.py' Line 331
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:         h_conv1_part_img1 = tf.concat(1, h_conv1_imgs_part[0:6])
+                                                                          
+    New:         h_conv1_part_img1 = tf.concat(axis=1, values=h_conv1_imgs_part[0:6])
+                                               ~~~~~   ~~~~~~~                        
+
+'bmicp/stomata_model.py' Line 332
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:         h_conv1_part_img2 = tf.concat(1, h_conv1_imgs_part[6:12])
+                                                                           
+    New:         h_conv1_part_img2 = tf.concat(axis=1, values=h_conv1_imgs_part[6:12])
+                                               ~~~~~   ~~~~~~~                         
+
+'bmicp/stomata_model.py' Line 333
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:         h_conv1_part_img3 = tf.concat(1, h_conv1_imgs_part[12:18])
+                                                                            
+    New:         h_conv1_part_img3 = tf.concat(axis=1, values=h_conv1_imgs_part[12:18])
+                                               ~~~~~   ~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 334
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:         h_conv1_part_img4 = tf.concat(1, h_conv1_imgs_part[18:24])
+                                                                            
+    New:         h_conv1_part_img4 = tf.concat(axis=1, values=h_conv1_imgs_part[18:24])
+                                               ~~~~~   ~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 335
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:         h_conv1_part_img5 = tf.concat(1, h_conv1_imgs_part[24:30])
+                                                                            
+    New:         h_conv1_part_img5 = tf.concat(axis=1, values=h_conv1_imgs_part[24:30])
+                                               ~~~~~   ~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 336
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:         h_conv1_part_img6 = tf.concat(1, h_conv1_imgs_part[30:36])
+                                                                            
+    New:         h_conv1_part_img6 = tf.concat(axis=1, values=h_conv1_imgs_part[30:36])
+                                               ~~~~~   ~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 337
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:         h_conv1_part_img = tf.concat(2, [h_conv1_part_img1, h_conv1_part_img2, h_conv1_part_img3, h_conv1_part_img4, h_conv1_part_img5, h_conv1_part_img6])
+                                                                                                                                                                     
+    New:         h_conv1_part_img = tf.concat(axis=2, values=[h_conv1_part_img1, h_conv1_part_img2, h_conv1_part_img3, h_conv1_part_img4, h_conv1_part_img5, h_conv1_part_img6])
+                                              ~~~~~   ~~~~~~~                                                                                                                    
+
+'bmicp/stomata_model.py' Line 342
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_conv1_img1 = tf.concat(1, h_conv1_imgs[0:7])
+                                                            
+    New:     h_conv1_img1 = tf.concat(axis=1, values=h_conv1_imgs[0:7])
+                                      ~~~~~   ~~~~~~~                   
+
+'bmicp/stomata_model.py' Line 343
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_conv1_img2 = tf.concat(1, h_conv1_imgs[7:14])
+                                                             
+    New:     h_conv1_img2 = tf.concat(axis=1, values=h_conv1_imgs[7:14])
+                                      ~~~~~   ~~~~~~~                    
+
+'bmicp/stomata_model.py' Line 344
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_conv1_img3 = tf.concat(1, h_conv1_imgs[14:21])
+                                                              
+    New:     h_conv1_img3 = tf.concat(axis=1, values=h_conv1_imgs[14:21])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 345
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_conv1_img4 = tf.concat(1, h_conv1_imgs[21:28])
+                                                              
+    New:     h_conv1_img4 = tf.concat(axis=1, values=h_conv1_imgs[21:28])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 346
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_conv1_img5 = tf.concat(1, h_conv1_imgs[28:35])
+                                                              
+    New:     h_conv1_img5 = tf.concat(axis=1, values=h_conv1_imgs[28:35])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 347
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_conv1_img6 = tf.concat(1, h_conv1_imgs[35:42])
+                                                              
+    New:     h_conv1_img6 = tf.concat(axis=1, values=h_conv1_imgs[35:42])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 348
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_conv1_img7 = tf.concat(1, h_conv1_imgs[42:49])
+                                                              
+    New:     h_conv1_img7 = tf.concat(axis=1, values=h_conv1_imgs[42:49])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 349
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_conv1_img = tf.concat(2, [h_conv1_img1, h_conv1_img2, h_conv1_img3, h_conv1_img4, h_conv1_img5, h_conv1_img6, h_conv1_img7])
+                                                                                                                                            
+    New:     h_conv1_img = tf.concat(axis=2, values=[h_conv1_img1, h_conv1_img2, h_conv1_img3, h_conv1_img4, h_conv1_img5, h_conv1_img6, h_conv1_img7])
+                                     ~~~~~   ~~~~~~~                                                                                                    
+
+'bmicp/stomata_model.py' Line 360
+--------------------------------------------------------------------------------
+
+Added keyword 'axis' to reordered function 'tf.split'
+Added keyword 'num_or_size_splits' to reordered function 'tf.split'
+Added keyword 'value' to reordered function 'tf.split'
+
+    Old:     h_pool1_imgs = tf.split(0, 49, h_pool1_imgs) # (1,14,14,32) * 49
+                                                                              
+    New:     h_pool1_imgs = tf.split(axis=0, num_or_size_splits=49, value=h_pool1_imgs) # (1,14,14,32) * 49
+                                     ~~~~~   ~~~~~~~~~~~~~~~~~~~    ~~~~~~                                  
+
+'bmicp/stomata_model.py' Line 363
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:       h_pool1_imgs[i] = tf.concat(3, [h_pool1_imgs[i],zero_pad,zero_pad,zero_pad,zero_pad]) # (1,14,14,36)
+                                                                                                                    
+    New:       h_pool1_imgs[i] = tf.concat(axis=3, values=[h_pool1_imgs[i],zero_pad,zero_pad,zero_pad,zero_pad]) # (1,14,14,36)
+                                           ~~~~~   ~~~~~~~                                                                      
+
+'bmicp/stomata_model.py' Line 364
+--------------------------------------------------------------------------------
+
+Added keyword 'axis' to reordered function 'tf.split'
+Added keyword 'num_or_size_splits' to reordered function 'tf.split'
+Added keyword 'value' to reordered function 'tf.split'
+
+    Old:       h_pool1_imgs_part = tf.split(3, 36, h_pool1_imgs[i]) # (1,14,14,1) * 36
+                                                                                       
+    New:       h_pool1_imgs_part = tf.split(axis=3, num_or_size_splits=36, value=h_pool1_imgs[i]) # (1,14,14,1) * 36
+                                            ~~~~~   ~~~~~~~~~~~~~~~~~~~    ~~~~~~                                    
+
+'bmicp/stomata_model.py' Line 370
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:       h_pool1_part_img1 = tf.concat(1, h_pool1_imgs_part[0:6])
+                                                                        
+    New:       h_pool1_part_img1 = tf.concat(axis=1, values=h_pool1_imgs_part[0:6])
+                                             ~~~~~   ~~~~~~~                        
+
+'bmicp/stomata_model.py' Line 371
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:       h_pool1_part_img2 = tf.concat(1, h_pool1_imgs_part[6:12])
+                                                                         
+    New:       h_pool1_part_img2 = tf.concat(axis=1, values=h_pool1_imgs_part[6:12])
+                                             ~~~~~   ~~~~~~~                         
+
+'bmicp/stomata_model.py' Line 372
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:       h_pool1_part_img3 = tf.concat(1, h_pool1_imgs_part[12:18])
+                                                                          
+    New:       h_pool1_part_img3 = tf.concat(axis=1, values=h_pool1_imgs_part[12:18])
+                                             ~~~~~   ~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 373
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:       h_pool1_part_img4 = tf.concat(1, h_pool1_imgs_part[18:24])
+                                                                          
+    New:       h_pool1_part_img4 = tf.concat(axis=1, values=h_pool1_imgs_part[18:24])
+                                             ~~~~~   ~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 374
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:       h_pool1_part_img5 = tf.concat(1, h_pool1_imgs_part[24:30])
+                                                                          
+    New:       h_pool1_part_img5 = tf.concat(axis=1, values=h_pool1_imgs_part[24:30])
+                                             ~~~~~   ~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 375
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:       h_pool1_part_img6 = tf.concat(1, h_pool1_imgs_part[30:36])
+                                                                          
+    New:       h_pool1_part_img6 = tf.concat(axis=1, values=h_pool1_imgs_part[30:36])
+                                             ~~~~~   ~~~~~~~                          
+
+'bmicp/stomata_model.py' Line 376
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:       h_pool1_part_img = tf.concat(2, [h_pool1_part_img1, h_pool1_part_img2, h_pool1_part_img3, h_pool1_part_img4, h_pool1_part_img5, h_pool1_part_img6])
+                                                                                                                                                                   
+    New:       h_pool1_part_img = tf.concat(axis=2, values=[h_pool1_part_img1, h_pool1_part_img2, h_pool1_part_img3, h_pool1_part_img4, h_pool1_part_img5, h_pool1_part_img6])
+                                            ~~~~~   ~~~~~~~                                                                                                                    
+
+'bmicp/stomata_model.py' Line 381
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_pool1_img1 = tf.concat(1, h_pool1_imgs[0:7])
+                                                            
+    New:     h_pool1_img1 = tf.concat(axis=1, values=h_pool1_imgs[0:7])
+                                      ~~~~~   ~~~~~~~                   
+
+'bmicp/stomata_model.py' Line 382
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_pool1_img2 = tf.concat(1, h_pool1_imgs[7:14])
+                                                             
+    New:     h_pool1_img2 = tf.concat(axis=1, values=h_pool1_imgs[7:14])
+                                      ~~~~~   ~~~~~~~                    
+
+'bmicp/stomata_model.py' Line 383
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_pool1_img3 = tf.concat(1, h_pool1_imgs[14:21])
+                                                              
+    New:     h_pool1_img3 = tf.concat(axis=1, values=h_pool1_imgs[14:21])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 384
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_pool1_img4 = tf.concat(1, h_pool1_imgs[21:28])
+                                                              
+    New:     h_pool1_img4 = tf.concat(axis=1, values=h_pool1_imgs[21:28])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 385
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_pool1_img5 = tf.concat(1, h_pool1_imgs[28:35])
+                                                              
+    New:     h_pool1_img5 = tf.concat(axis=1, values=h_pool1_imgs[28:35])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 386
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_pool1_img6 = tf.concat(1, h_pool1_imgs[35:42])
+                                                              
+    New:     h_pool1_img6 = tf.concat(axis=1, values=h_pool1_imgs[35:42])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 387
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_pool1_img7 = tf.concat(1, h_pool1_imgs[42:49])
+                                                              
+    New:     h_pool1_img7 = tf.concat(axis=1, values=h_pool1_imgs[42:49])
+                                      ~~~~~   ~~~~~~~                     
+
+'bmicp/stomata_model.py' Line 388
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:     h_pool1_img = tf.concat(2, [h_pool1_img1, h_pool1_img2, h_pool1_img3, h_pool1_img4, h_pool1_img5, h_pool1_img6, h_pool1_img7])
+                                                                                                                                            
+    New:     h_pool1_img = tf.concat(axis=2, values=[h_pool1_img1, h_pool1_img2, h_pool1_img3, h_pool1_img4, h_pool1_img5, h_pool1_img6, h_pool1_img7])
+                                     ~~~~~   ~~~~~~~                                                                                                    
+
+'bmicp/stomata_model.py' Line 390
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.image_summary' to 'tf.summary.image'
+
+    Old:     h_pool1_sum = tf.image_summary("h_pool1_Visualize", h_pool1_img, max_images=10)
+                           ~~~~~~~~~~~~~~~~                                                  
+    New:     h_pool1_sum = tf.summary.image("h_pool1_Visualize", h_pool1_img, max_images=10)
+                           ~~~~~~~~~~~~~~~~                                                  
+
+
+--------------------------------------------------------------------------------
+Processing file 'bmicp/utils.py'
+ outputting to 'bmicip-updated/utils.py'
+--------------------------------------------------------------------------------
+
+'bmicp/utils.py' Line 511
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.initialize_all_variables' to 'tf.global_variables_initializer'
+
+    Old:     sess.run(tf.initialize_all_variables())
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+    New:     sess.run(tf.global_variables_initializer())
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+
+
